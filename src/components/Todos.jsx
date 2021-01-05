@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 const axios = require('axios');
 
 
-export default function Todos() {
-const [todos, SetTodos] = useState()
+function Loader() {
+	return (
+		<Spinner animation="grow" />
+	) 
+}
 
-	useEffect(() => {
+export default function Todos() {
+	const [todos, SetTodos] = useState()
+	const [loading, setLoading] = useState(true)
+
+	useLayoutEffect(() => {
 		axios.get('https://cors-anywhere.herokuapp.com/https://pau16-todolist-api.herokuapp.com/api/v1/todos', {
 			method: "GET",
-			mode: "no-cors",
 			headers: {
-				"Accept": "application/json",
-				"Content-Type": "application/json",
-				"Access-Control-Allow-Methods": "GET",
-				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Origin": "http://localhost:3000/",
 			},
 		})
 			.then(function (response) {
 				// handle success
-				console.log(response.data);
+				setLoading(false)
+				SetTodos(response.data);
 			})
 			.catch(function (error) {
 				// handle error
@@ -27,7 +32,12 @@ const [todos, SetTodos] = useState()
 	}, [])
 
 	return (
-		<h1 className="font-serif font-black text-3xl">Task Manager</h1>
+		<div>
+			<h1 className="font-serif font-black text-3xl">Task Manager</h1>
+			
+			{ loading ? <Loader/> : <div>{JSON.stringify(todos)}</div>}
+		</div>	
+
 
 	)
 }
