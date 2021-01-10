@@ -1,43 +1,32 @@
-import React, { useState, useLayoutEffect } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-const axios = require('axios');
+import React from 'react' 
+import Loader from '../ui/Loader'
 
-
-function Loader() {
-	return (
-		<Spinner animation="grow" />
-	) 
-}
-
-export default function Todos() {
-	const [todos, SetTodos] = useState()
-	const [loading, setLoading] = useState(true)
-
-	useLayoutEffect(() => {
-		axios.get('https://cors-anywhere.herokuapp.com/https://pau16-todolist-api.herokuapp.com/api/v1/todos', {
-			method: "GET",
-			headers: {
-				"Access-Control-Allow-Origin": "http://localhost:3000/",
-			},
-		})
-			.then(function (response) {
-				// handle success
-				setLoading(false)
-				SetTodos(response.data);
-			})
-			.catch(function (error) {
-				// handle error
-				console.log(error);
-			})
-	}, [])
-
+export default function Todos({todos}) {
 	return (
 		<div>
-			<h1 className="font-serif font-black text-3xl">Task Manager</h1>
-			
-			{ loading ? <Loader/> : <div>{JSON.stringify(todos)}</div>}
-		</div>	
+			<div className="input-group mb-3">
+				<input type="text" className="form-control" placeholder="Add a new todo" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+					<div className="input-group-append">
+					<button className="btn btn-primary btn-bg-blue-800" type="button" id="button-addon2">Button</button>
+					</div>
+			</div>
+			<div className="p-2 text-left shadow-md bg-white rounded-lg">
+				{todos === undefined ? <Loader /> : todos.map((todo, key) => <Todo key={key} todo={todo}/>)}
+
+			</div>
+		</div>
+	)
+}
 
 
+function Todo({todo}) {
+	return (
+		<div className="my-1 d-flex justify-content-between">
+			<div>
+				<input type="checkbox" className="checked:bg-blue-600 checked:border-transparent mr-2" {...todo.done ? "checked" : ""} ></input>
+				{todo.title} 
+			</div>
+			<button className="btn btn-danger btn-sm"> <i class="fa fa-times pr-1"></i> <span className="font-bold">Delete</span></button>
+		</div>
 	)
 }
