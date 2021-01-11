@@ -1,10 +1,13 @@
 # Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The app is visible here https://paulinedussart.github.io/react-todolist/
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn deploy`
+
+To push in production
 
 ### `yarn start`
 
